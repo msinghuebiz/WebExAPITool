@@ -101,7 +101,7 @@ namespace WebExAPITool.Intersight
 
 
 
-            //intersightIntialConfig.prepare_auth_header("/cond/Alarms", RestSharp.Method.GET, null, new Dictionary<string, string>());
+            //intersightIntialConfig.prepare_auth_header("/cond/Alarms", RestSharp.Method.Get, null, new Dictionary<string, string>());
 
             var localVarPath = functionName;
             var localVarPathParams = new Dictionary<String, String>();
@@ -144,9 +144,9 @@ namespace WebExAPITool.Intersight
             }
 
             // make the HTTP request
-            IRestResponse localVarResponse = (IRestResponse)intersightIntialConfig.CallApi(localVarPath,
-                Method.GET, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
-                localVarPathParams, localVarHttpContentType);
+            RestResponse localVarResponse = (RestResponse)intersightIntialConfig.CallApi(localVarPath,
+                Method.Get, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
+                localVarPathParams, localVarHttpContentType).Result;
 
             int localVarStatusCode = (int)localVarResponse.StatusCode;
 
@@ -156,12 +156,28 @@ namespace WebExAPITool.Intersight
                 if (exception != null) throw exception;
             }
 
+            var dicHeder = new Dictionary<string, string>();
+
+            foreach (var item in localVarResponse.Headers)
+            {
+                if(!(dicHeder.ContainsKey(item.Name)))
+                {
+                    dicHeder.Add(item.Name, item.Value.ToString());
+                }
+            }
+
+
+
             var response = new ApiResponse<T>(localVarStatusCode,
-                 localVarResponse.Headers.ToDictionary(x => x.Name, x => x.Value.ToString()),
+                 dicHeder,
                  (T)intersightIntialConfig.Configuration.ApiClient.Deserialize(localVarResponse, typeof(T)));
 
+         //   var response = new ApiResponse<T>(localVarStatusCode,
+         ////     localVarResponse.Headers.ToDictionary(x => x.Name, x => x.Value.ToString()),
+        //      (T)intersightIntialConfig.Configuration.ApiClient.Deserialize(localVarResponse, typeof(T)));
 
-          return response;
+
+            return response;
         }
 
     }

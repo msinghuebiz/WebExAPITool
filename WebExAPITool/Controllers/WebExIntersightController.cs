@@ -21,7 +21,9 @@ using Remotion.Linq.Parsing.Structure.IntermediateModel;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Identity.UI.Pages.Internal.Account;
 using Microsoft.AspNetCore.Hosting;
-using WebExAPITool.Intersight.Api;
+using Microsoft.AspNetCore.Authorization;
+using System.Net.Http;
+//using WebExAPITool.Intersight.Api;
 //using Confluent.SchemaRegistry.Serdes;
 //using Confluent.SchemaRegistry;
 
@@ -102,6 +104,19 @@ namespace WebExAPITool.Controllers
             }
             set { _exceptionFactory = value; }
         }
+
+
+        [HttpGet]
+        [Route("GetStatus")]
+        [AllowAnonymous]
+        public async Task<HttpResponseMessage> GetStatus()
+        {
+            var result = new HttpResponseMessage();
+            result.StatusCode = System.Net.HttpStatusCode.OK;
+
+            return result;
+        }
+
 
         [HttpGet]
         [Route("GetServerDetailsSearch")]
@@ -822,7 +837,8 @@ namespace WebExAPITool.Controllers
         [Route("SendLatestAlarmJef")]
         public async Task<int?> SendLatestAlarmJef()
         {
-               var filePath = _Config.GetSection("EmailSettings").GetValue<string>("filePath");
+               
+            var filePath = _Config.GetSection("EmailSettings").GetValue<string>("filePath");
             var testApi = _Config.GetSection("EmailSettings").GetValue<string>("testApi");
             try
             {
@@ -2119,80 +2135,80 @@ namespace WebExAPITool.Controllers
             return response;
         }
 
-        public async Task<Intersight.Model.CondAlarmList> GetLatestAlarms_old()
-        {
-            Intersight.Model.CondAlarmList result = new Intersight.Model.CondAlarmList();
-            try
-            {
-                ////https://5d079d727564612d305b9414.intersight.com/api/v1
-                var path = "D:\\Projects\\Uebiz\\WebExAPITool\\WebExAPITool\\WebExAPITool.Intersight\\SecretKey.pem";
-                var intersightIntialConfig = new Intersight.Client.IntersightApiClient("https://www.intersight.com/api/v1",
-                path, "5d079d727564612d305b9414/5d76b95a7564612d30b70f60/5d76bb697564612d30b7bef9");
+        //public async Task<Intersight.Model.CondAlarmList> GetLatestAlarms_old()
+        //{
+        //    Intersight.Model.CondAlarmList result = new Intersight.Model.CondAlarmList();
+        //    try
+        //    {
+        //        ////https://5d079d727564612d305b9414.intersight.com/api/v1
+        //        var path = "D:\\Projects\\Uebiz\\WebExAPITool\\WebExAPITool\\WebExAPITool.Intersight\\SecretKey.pem";
+        //        var intersightIntialConfig = new Intersight.Client.IntersightApiClient("https://www.intersight.com/api/v1",
+        //        path, "5d079d727564612d305b9414/5d76b95a7564612d30b70f60/5d76bb697564612d30b7bef9");
 
 
 
-                //intersightIntialConfig.prepare_auth_header("/cond/Alarms", RestSharp.Method.GET, null, new Dictionary<string, string>());
+        //        //intersightIntialConfig.prepare_auth_header("/cond/Alarms", RestSharp.Method.Get, null, new Dictionary<string, string>());
 
-                var localVarPath = "/cond/Alarms";
-                var localVarPathParams = new Dictionary<String, String>();
-                var localVarQueryParams = new Dictionary<String, String>();
-                var localVarHeaderParams = new Dictionary<String, String>(intersightIntialConfig.Configuration.DefaultHeader);
-                var localVarFormParams = new Dictionary<String, String>();
-                var localVarFileParams = new Dictionary<String, FileParameter>();
-                Object localVarPostBody = null;
+        //        var localVarPath = "/cond/Alarms";
+        //        var localVarPathParams = new Dictionary<String, String>();
+        //        var localVarQueryParams = new Dictionary<String, String>();
+        //        var localVarHeaderParams = new Dictionary<String, String>(intersightIntialConfig.Configuration.DefaultHeader);
+        //        var localVarFormParams = new Dictionary<String, String>();
+        //        var localVarFileParams = new Dictionary<String, FileParameter>();
+        //        Object localVarPostBody = null;
 
-                // to determine the Content-Type header
-                String[] localVarHttpContentTypes = new String[] {
-                "application/json"
-            };
-                String localVarHttpContentType = intersightIntialConfig.Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
+        //        // to determine the Content-Type header
+        //        String[] localVarHttpContentTypes = new String[] {
+        //        "application/json"
+        //    };
+        //        String localVarHttpContentType = intersightIntialConfig.Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
 
-                // to determine the Accept header
-                String[] localVarHttpHeaderAccepts = new String[] {
-                "application/json"
-            };
-                String localVarHttpHeaderAccept = intersightIntialConfig.Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
-                if (localVarHttpHeaderAccept != null)
-                    localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
-
-
-                // make the HTTP request
-                IRestResponse localVarResponse = (IRestResponse)intersightIntialConfig.CallApi(localVarPath,
-                    Method.GET, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
-                    localVarPathParams, localVarHttpContentType);
-
-                int localVarStatusCode = (int)localVarResponse.StatusCode;
-
-                if (ExceptionFactory != null)
-                {
-                    Exception exception = ExceptionFactory("CondAlarmsGet", localVarResponse);
-                    if (exception != null) throw exception;
-                }
-
-                var response = new ApiResponse<CondAlarmList>(localVarStatusCode,
-                     localVarResponse.Headers.ToDictionary(x => x.Name, x => x.Value.ToString()),
-                     (CondAlarmList)intersightIntialConfig.Configuration.ApiClient.Deserialize(localVarResponse, typeof(CondAlarmList)));
+        //        // to determine the Accept header
+        //        String[] localVarHttpHeaderAccepts = new String[] {
+        //        "application/json"
+        //    };
+        //        String localVarHttpHeaderAccept = intersightIntialConfig.Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
+        //        if (localVarHttpHeaderAccept != null)
+        //            localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
 
 
-                result = response.Data;
-                //  var client = new Intersight.Client.ApiClient(intersightIntialConfig.Configuration);
+        //        // make the HTTP request
+        //        RestResponse localVarResponse = (RestResponse)intersightIntialConfig.CallApi(localVarPath,
+        //            Method.Get, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
+        //            localVarPathParams, localVarHttpContentType);
+
+        //        int localVarStatusCode = (int)localVarResponse.StatusCode;
+
+        //        if (ExceptionFactory != null)
+        //        {
+        //            Exception exception = ExceptionFactory("CondAlarmsGet", localVarResponse);
+        //            if (exception != null) throw exception;
+        //        }
+
+        //        var response = new ApiResponse<CondAlarmList>(localVarStatusCode,
+        //             localVarResponse.Headers.ToDictionary(x => x.Name, x => x.Value.ToString()),
+        //             (CondAlarmList)intersightIntialConfig.Configuration.ApiClient.Deserialize(localVarResponse, typeof(CondAlarmList)));
 
 
-                //var alaramSet = new Intersight.Api.CondAlarmApi(intersightIntialConfig.Configuration);
-                var alaramSet = new Intersight.Api.CondAlarmApi(intersightIntialConfig.Configuration);
-                // alaramSet.Configuration = intersightIntialConfig.Configuration;
-                var result1 = await alaramSet.CondAlarmsMoidGetAsync("aa");
+        //        result = response.Data;
+        //        //  var client = new Intersight.Client.ApiClient(intersightIntialConfig.Configuration);
 
-                var aa = new Intersight.Api.EquipmentChassisApi();
-                var result2 = aa.EquipmentChassesMoidGet("aa");
-            }
-            catch (Exception ex)
-            {
 
-            }
+        //        //var alaramSet = new Intersight.Api.CondAlarmApi(intersightIntialConfig.Configuration);
+        //        var alaramSet = new Intersight.Api.CondAlarmApi(intersightIntialConfig.Configuration);
+        //        // alaramSet.Configuration = intersightIntialConfig.Configuration;
+        //        var result1 = await alaramSet.CondAlarmsMoidGetAsync("aa");
 
-            return result;
-        }
+        //        var aa = new Intersight.Api.EquipmentChassisApi();
+        //        var result2 = aa.EquipmentChassesMoidGet("aa");
+        //    }
+        //    catch (Exception ex)
+        //    {
+
+        //    }
+
+        //    return result;
+        //}
 
 
         #region " Private Method "

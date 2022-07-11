@@ -15,6 +15,7 @@ using RestSharp;
 using System.Web;
 
 using WebExAPITool.Intersight.Model;
+using System.Threading.Tasks;
 
 namespace WebExAPITool.Intersight.Client
 {
@@ -404,7 +405,7 @@ namespace WebExAPITool.Intersight.Client
 
             return null;
         }
-        public  Object CallApi(
+        public async  Task<Object> CallApi(
             String path, RestSharp.Method method, Dictionary<String, String> queryParams, Object postBody,
             Dictionary<String, String> headerParams, Dictionary<String, String> formParams,
             Dictionary<String, FileParameter> fileParams, Dictionary<String, String> pathParams,
@@ -437,7 +438,7 @@ namespace WebExAPITool.Intersight.Client
                 string value = x.Value;
             }
              
-            return base.CallApi(path, method, queryParams, postBody, headerParams, formParams, fileParams, pathParams, contentType);
+            return await base.CallApi(path, method, queryParams, postBody, headerParams, formParams, fileParams, pathParams, contentType);
         }
 
         public byte[] get_sha256_digest(string data)

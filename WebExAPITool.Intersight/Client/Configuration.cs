@@ -106,12 +106,13 @@ namespace WebExAPITool.Intersight.Client
         /// <value>Timeout.</value>
         public int Timeout
         {
-            get { return ApiClient.RestClient.Timeout; }
+            get { return 100000; }
 
             set
             {
                 if (ApiClient != null)
-                    ApiClient.RestClient.Timeout = value;
+                { }
+                    //ApiClient.RestClient.Timeout = value;
             }
         }
 

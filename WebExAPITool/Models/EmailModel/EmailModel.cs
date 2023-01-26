@@ -77,7 +77,10 @@ namespace WebExAPITool.Models
             orName.Add("AlarmServiceProfile", inputStructure.payload.ancestor_serviceprofile);
             orName.Add("AlarmAffectedUserLabel", inputStructure.payload.affected_userlabel);
             orName.Add("AlarmAffectedcServiceProfile", inputStructure.payload.affected_serviceprofile );
-                                  
+            orName.Add("AlarmAncestorObject", inputStructure.payload.ancestor_obj);
+            orName.Add("AlarmAncestorSerial", inputStructure.payload.ancestor_serial);
+            orName.Add("AlarmAncestorModel", inputStructure.payload.ancestor_model);
+
             return orName;
         }
 

@@ -1043,6 +1043,13 @@ namespace WebExAPITool.Controllers
                             // check when email is enabled 
                             if (_emailenable == "1")
                             {
+                                var skipemailSubjects = _Config.GetSection("EmailSettings").GetValue<string>("skipsubjects");
+                                var listSkippedEmails = new List<string>();
+                                if (!(string.IsNullOrEmpty(skipemailSubjects)))
+                                {
+                                    listSkippedEmails = skipemailSubjects.Split(",").ToList();
+                                }
+
                                 var objModelEmail = new EmailModel();
                                 string emailBody = objModelEmail.GetEmailBodyTemplate(_Host.ContentRootPath);
                                 var dicEmailvariables = objModelEmail.GetCompiledDictionary(outputModel);
@@ -1057,8 +1064,22 @@ namespace WebExAPITool.Controllers
                                 {
                                     emailSubject = objModelEmail.ReplacePlaceholder(emailSubject, "{{" + itemSubjectPlaceholder.Key + "}}", itemSubjectPlaceholder.Value);
                                 }
-                                var objEmails = new Emails(_Context, _Config);
-                                objEmails.SendEmail(emailBody, emailSubject.Trim(), outputModel.payload.org_name );
+
+                                if (!(listSkippedEmails.Any(emailSubject.Contains)))
+                                {
+
+                                    var objEmails = new Emails(_Context, _Config);
+                                    objEmails.SendEmail(emailBody, emailSubject.Trim(), outputModel.payload.org_name);
+                                }
+                                else
+                                {
+                                    //System.IO.File.AppendAllText(filePath, "*************************************\r\n");
+                                    //System.IO.File.AppendAllText(filePath, "Enter into the code for not compatible subject \r\n");
+                                    //System.IO.File.AppendAllText(filePath, emailSubject + "\r\n");
+                                    //System.IO.File.AppendAllText(filePath, "*************************************\r\n");
+
+                                    //var s = string.Empty;
+                                }
                             }
                         }
                         catch (Exception ex )
